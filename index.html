@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dynamic State Transitions</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenLite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/color-js@1.0.3"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+    <div>
+        <svg width="200" height="200">
+            <polygon :points="points"></polygon>
+            <circle cx="100" cy="100" r="90"></circle>
+        </svg>
+    </div>
+    <p class="neon-text">Hans Kontrollen</p>
+    
+    <label>Seiten: {{ sides }}</label>
+    <input 
+        type="range" 
+        min="3" 
+        max="500" 
+        v-model.number="sides"
+    >
+
+    <label>Minimaler Radius: {{ minRadius }}%</label>
+    <input 
+        type="range" 
+        min="0" 
+        max="90" 
+        v-model.number="minRadius"
+    >
+
+    <label>Aktualisierungsintervall: {{ updateInterval }} Millisekunden</label>
+    <input 
+        type="range" 
+        min="10" 
+        max="2000"
+        v-model.number="updateInterval"
+    >
+
+</div> 
+
+
+
+<script>
+var s = document.createElement('style'), 
+    r = document.querySelector('input[type=range]'), 
+    prefs = ['webkit-slider-runnable', 'moz-range'];
+
+document.body.appendChild(s);
+
+var getTrackStyleStr = function(el, val) {
+  var str = '', len = prefs.length;
+  
+  for(var i = 0; i < len; i++) {
+    str += '.js input[type=range]::-' + prefs[i] + 
+      '-track{background-size:' + val + '}';
+  }
+    
+  return str;
+};
+
+var getValStr = function(el, p) {
+  var min = el.min || 0, 
+      p = p || el.value, 
+      perc = (el.max) ? ~~(100*(p - min)/(el.max - min)) : p, 
+      val = perc + '% 100%,100% 100%,100% 100%';
+  
+  return val;
+};
+
+r.addEventListener('input', function() {
+  s.textContent = getTrackStyleStr(this, getValStr(this));
+}, false);
+</script>
+<script src="index.js"></script>    
+</body>
+</html>
